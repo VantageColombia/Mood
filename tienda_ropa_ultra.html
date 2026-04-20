@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAISON ÉLITE — Haute Couture</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --beige: #f5f0e8;
+    --beige-dark: #e8dfd0;
+    --beige-mid: #ede7da;
+    --white: #fdfcfa;
+    --cream: #f9f5ef;
+    --gold: #c9a96e;
+    --gold-light: #e2c99a;
+    --charcoal: #2a2520;
+    --text-mid: #6b5e52;
+    --text-light: #9e8e80;
+    --shadow: rgba(42,37,32,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--beige);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  * { cursor: none !important; }
+  #cursor {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    position: fixed; pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.15s, width 0.2s, height 0.2s, background 0.2s;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed; pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.35s cubic-bezier(.16,1,.3,1), width 0.3s, height 0.3s;
+    opacity: 0.6;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: var(--charcoal);
+    color: var(--gold-light);
+    text-align: center;
+    padding: 10px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 300;
+    text-transform: uppercase;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,252,250,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--beige-dark);
+    padding: 0 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 80px;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    color: var(--charcoal);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    font-weight: 400;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-actions { display: flex; gap: 20px; align-items: center; }
+  .cart-btn {
+    position: relative;
+    background: none; border: none;
+    font-size: 20px; color: var(--charcoal);
+    transition: color 0.3s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cart-btn:hover { color: var(--gold); }
+  .cart-count {
+    background: var(--gold);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 500;
+    border-radius: 50%;
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: -8px; right: -8px;
+  }
+
+  /* ── HERO CAROUSEL ── */
+  .hero {
+    position: relative;
+    height: 92vh;
+    overflow: hidden;
+  }
+  .slides { display: flex; height: 100%; transition: transform 0.9s cubic-bezier(.77,0,.18,1); }
+  .slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .slide-bg {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform 7s ease;
+  }
+  .slide.active .slide-bg { transform: scale(1); }
+  .slide-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg, rgba(245,240,232,0.72) 0%, rgba(245,240,232,0.2) 60%, transparent 100%);
+  }
+  .slide-content {
+    position: absolute;
+    top: 50%; left: 10%;
+    transform: translateY(-50%);
+    max-width: 520px;
+    opacity: 0;
+    transform: translateY(-40%) translateX(-20px);
+    transition: opacity 0.8s 0.4s, transform 0.8s 0.4s;
+  }
+  .slide.active .slide-content {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  .slide-tag {
+    font-size: 11px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 16px;
+    display: block;
+  }
+  .slide-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 6vw, 84px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--charcoal);
+    margin-bottom: 20px;
+  }
+  .slide-title em { font-style: italic; color: var(--gold); }
+  .slide-desc {
+    font-size: 13px; line-height: 1.8;
+    color: var(--text-mid); font-weight: 300;
+    margin-bottom: 36px; letter-spacing: 0.5px;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 14px 40px;
+    background: var(--charcoal);
+    color: var(--beige);
+    text-decoration: none;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 400;
+    border: none;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold); color: var(--white); transform: translateY(-1px); }
+  .btn-outline {
+    display: inline-block;
+    padding: 13px 38px;
+    border: 1px solid var(--charcoal);
+    color: var(--charcoal);
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 400;
+    text-decoration: none;
+    background: transparent;
+    transition: all 0.3s;
+    margin-left: 16px;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* Carousel controls */
+  .carousel-dots {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; gap: 10px;
+  }
+  .dot {
+    width: 28px; height: 2px;
+    background: rgba(42,37,32,0.3);
+    border: none;
+    transition: background 0.3s, width 0.3s;
+  }
+  .dot.active { background: var(--gold); width: 52px; }
+  .carousel-arrows {
+    position: absolute; top: 50%; right: 40px;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .arrow-btn {
+    width: 44px; height: 44px;
+    border: 1px solid rgba(42,37,32,0.2);
+    background: rgba(253,252,250,0.7);
+    backdrop-filter: blur(8px);
+    font-size: 18px; color: var(--charcoal);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .arrow-btn:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    text-align: center;
+    padding: 80px 20px 50px;
+  }
+  .section-tag {
+    font-size: 11px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 14px; display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 300; color: var(--charcoal);
+    line-height: 1.1;
+  }
+  .section-title em { font-style: italic; }
+  .section-line {
+    width: 60px; height: 1px;
+    background: var(--gold);
+    margin: 20px auto 0;
+  }
+
+  /* ── CATEGORIES GRID ── */
+  .categories {
+    padding: 20px 60px 80px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  .cat-card {
+    position: relative; overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--beige-dark);
+  }
+  .cat-card:first-child { grid-column: span 2; aspect-ratio: unset; min-height: 500px; }
+  .cat-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+  }
+  .cat-card:hover .cat-img { transform: scale(1.06); }
+  .cat-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(42,37,32,0.6) 0%, transparent 60%);
+    display: flex; flex-direction: column;
+    justify-content: flex-end; padding: 30px;
+  }
+  .cat-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300;
+    color: var(--white); letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .cat-link {
+    font-size: 11px; letter-spacing: 3px;
+    color: var(--gold-light); text-decoration: none;
+    text-transform: uppercase; font-weight: 300;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: gap 0.3s;
+  }
+  .cat-card:hover .cat-link { gap: 14px; }
+
+  /* ── PRODUCTS ── */
+  .products-section { padding: 0 60px 100px; }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+  .product-card {
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s, box-shadow 0.4s;
+  }
+  .product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px var(--shadow);
+  }
+  .product-img-wrap {
+    position: relative; overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--cream);
+  }
+  .product-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+  }
+  .product-card:hover .product-img { transform: scale(1.08); }
+  .product-badge {
+    position: absolute; top: 16px; left: 16px;
+    background: var(--charcoal);
+    color: var(--beige); font-size: 9px;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 5px 10px; font-weight: 500;
+  }
+  .product-badge.new { background: var(--gold); }
+  .product-actions {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(253,252,250,0.95);
+    backdrop-filter: blur(8px);
+    padding: 16px;
+    display: flex; flex-direction: column; gap: 8px;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+  }
+  .product-card:hover .product-actions { transform: translateY(0); }
+  .btn-add-cart {
+    width: 100%; padding: 11px;
+    background: var(--charcoal); color: var(--beige);
+    border: none; font-size: 10px;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    transition: background 0.3s;
+  }
+  .btn-add-cart:hover { background: var(--gold); }
+  .btn-whatsapp {
+    width: 100%; padding: 11px;
+    background: #25D366; color: white;
+    border: none; font-size: 10px;
+    letter-spacing: 2px; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+  .btn-whatsapp:hover { background: #128C7E; }
+  .product-info { padding: 20px; }
+  .product-brand {
+    font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 6px;
+  }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300;
+    color: var(--charcoal); margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .product-price { font-size: 14px; color: var(--text-mid); font-weight: 300; }
+  .product-price strong { color: var(--charcoal); font-weight: 500; }
+
+  /* ── MARQUEE BANNER ── */
+  .marquee-wrap {
+    background: var(--charcoal);
+    overflow: hidden; padding: 18px 0;
+    border-top: 1px solid #3a352f;
+    border-bottom: 1px solid #3a352f;
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    padding: 0 40px;
+    font-size: 12px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold-light);
+    font-weight: 300; display: flex; align-items: center; gap: 40px;
+  }
+  .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── FEATURED BANNER ── */
+  .featured-banner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 600px;
+    margin: 0 60px 80px;
+  }
+  .featured-img-side {
+    position: relative; overflow: hidden;
+    background: var(--beige-dark);
+  }
+  .featured-img-side img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s;
+  }
+  .featured-banner:hover .featured-img-side img { transform: scale(1.04); }
+  .featured-content-side {
+    background: var(--charcoal);
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 80px 70px;
+  }
+  .featured-tag {
+    font-size: 11px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 300; margin-bottom: 20px;
+  }
+  .featured-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 300;
+    color: var(--white); line-height: 1.1;
+    margin-bottom: 24px;
+  }
+  .featured-title em { font-style: italic; color: var(--gold-light); }
+  .featured-desc {
+    font-size: 13px; line-height: 1.9;
+    color: rgba(253,252,250,0.6);
+    font-weight: 300; margin-bottom: 40px;
+    letter-spacing: 0.3px;
+  }
+  .btn-light {
+    display: inline-block; padding: 14px 40px;
+    border: 1px solid var(--gold);
+    color: var(--gold); font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase;
+    text-decoration: none; font-weight: 400;
+    transition: all 0.3s;
+    align-self: flex-start;
+  }
+  .btn-light:hover { background: var(--gold); color: var(--charcoal); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { padding: 0 60px 100px; }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .testimonial-card {
+    background: var(--white);
+    padding: 40px 36px;
+    border-top: 2px solid var(--gold);
+  }
+  .quote-icon {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 60px; color: var(--gold);
+    line-height: 0.5; margin-bottom: 24px;
+    font-weight: 300;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-style: italic;
+    color: var(--charcoal); line-height: 1.7;
+    font-weight: 300; margin-bottom: 24px;
+  }
+  .testimonial-author { font-size: 11px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
+
+  /* ── NEWSLETTER ── */
+  .newsletter {
+    background: var(--beige-mid);
+    padding: 80px 60px;
+    text-align: center;
+    border-top: 1px solid var(--beige-dark);
+  }
+  .newsletter-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; font-weight: 300;
+    color: var(--charcoal); margin-bottom: 12px;
+  }
+  .newsletter-sub {
+    font-size: 12px; color: var(--text-light);
+    letter-spacing: 1px; margin-bottom: 36px;
+    font-weight: 300;
+  }
+  .newsletter-form {
+    display: flex; max-width: 480px; margin: 0 auto;
+    border: 1px solid var(--beige-dark);
+    background: var(--white);
+  }
+  .newsletter-form input {
+    flex: 1; padding: 16px 20px;
+    border: none; background: transparent;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; color: var(--charcoal);
+    outline: none; letter-spacing: 0.5px;
+  }
+  .newsletter-form button {
+    padding: 16px 28px;
+    background: var(--charcoal); color: var(--beige);
+    border: none; font-size: 10px;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    transition: background 0.3s;
+  }
+  .newsletter-form button:hover { background: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--charcoal);
+    color: rgba(253,252,250,0.6);
+    padding: 70px 60px 40px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 50px; margin-bottom: 60px;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300;
+    letter-spacing: 6px; color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-about { font-size: 13px; line-height: 1.8; font-weight: 300; }
+  .footer-col h4 {
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400; margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 10px; }
+  .footer-col ul li a {
+    color: rgba(253,252,250,0.5); text-decoration: none;
+    font-size: 13px; font-weight: 300;
+    transition: color 0.3s;
+  }
+  .footer-col ul li a:hover { color: var(--gold); }
+  .footer-bottom {
+    border-top: 1px solid rgba(253,252,250,0.1);
+    padding-top: 30px;
+    display: flex; justify-content: space-between;
+    align-items: center;
+    font-size: 11px; letter-spacing: 1px;
+  }
+  .social-links { display: flex; gap: 20px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(253,252,250,0.15);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(253,252,250,0.5); text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── CART SIDEBAR ── */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(42,37,32,0.4);
+    z-index: 200; opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+    backdrop-filter: blur(4px);
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-sidebar {
+    position: fixed; top: 0; right: 0;
+    width: 420px; height: 100vh;
+    background: var(--white);
+    z-index: 201;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(.77,0,.18,1);
+    display: flex; flex-direction: column;
+  }
+  .cart-sidebar.open { transform: translateX(0); }
+  .cart-header {
+    padding: 36px 32px 24px;
+    border-bottom: 1px solid var(--beige-dark);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .cart-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300;
+    letter-spacing: 2px;
+  }
+  .close-btn {
+    background: none; border: none;
+    font-size: 22px; color: var(--text-mid);
+    transition: color 0.3s;
+  }
+  .close-btn:hover { color: var(--charcoal); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 24px 32px; }
+  .cart-empty {
+    text-align: center; padding: 60px 20px;
+    color: var(--text-light);
+  }
+  .cart-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+  .cart-empty p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300;
+    color: var(--text-mid);
+  }
+  .cart-item {
+    display: flex; gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--beige-dark);
+  }
+  .cart-item-img {
+    width: 80px; height: 100px;
+    object-fit: cover; background: var(--cream);
+    flex-shrink: 0;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300;
+    margin-bottom: 4px;
+  }
+  .cart-item-brand { font-size: 10px; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; }
+  .cart-item-price { font-size: 13px; color: var(--text-mid); }
+  .cart-item-qty { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+  .qty-btn {
+    width: 26px; height: 26px; border: 1px solid var(--beige-dark);
+    background: none; font-size: 14px; color: var(--charcoal);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .qty-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .qty-num { font-size: 13px; font-weight: 400; min-width: 20px; text-align: center; }
+  .remove-item { background: none; border: none; color: var(--text-light); font-size: 12px; margin-left: auto; transition: color 0.3s; }
+  .remove-item:hover { color: #c0392b; }
+
+  .cart-footer {
+    padding: 24px 32px 36px;
+    border-top: 1px solid var(--beige-dark);
+  }
+  .cart-total {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 20px;
+  }
+  .cart-total span { font-size: 13px; letter-spacing: 1px; color: var(--text-mid); }
+  .cart-total strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 400; color: var(--charcoal);
+  }
+  .btn-checkout-wa {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px;
+    background: #25D366; color: white;
+    border: none; font-size: 11px;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400; text-decoration: none;
+    transition: background 0.3s;
+  }
+  .btn-checkout-wa:hover { background: #128C7E; }
+  .wa-note {
+    font-size: 11px; color: var(--text-light);
+    text-align: center; margin-top: 12px;
+    line-height: 1.6; letter-spacing: 0.3px;
+  }
+
+  /* ── PRODUCT MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(42,37,32,0.5);
+    z-index: 300; opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--white);
+    max-width: 820px; width: 90%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+  }
+  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+  .modal-img { background: var(--cream); }
+  .modal-img img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-content {
+    padding: 50px 44px;
+    overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .modal-close {
+    position: absolute; top: 20px; right: 24px;
+    background: none; border: none;
+    font-size: 26px; color: var(--text-mid);
+    transition: color 0.3s; z-index: 1;
+  }
+  .modal-close:hover { color: var(--charcoal); }
+  .modal-brand { font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; }
+  .modal-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px; font-weight: 300; margin-bottom: 14px; line-height: 1.1;
+  }
+  .modal-price { font-size: 22px; color: var(--charcoal); font-weight: 300; margin-bottom: 24px; }
+  .modal-desc { font-size: 13px; color: var(--text-mid); line-height: 1.8; font-weight: 300; margin-bottom: 30px; flex: 1; }
+  .modal-sizes { margin-bottom: 24px; }
+  .modal-sizes label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 10px; display: block; }
+  .size-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .size-btn {
+    width: 44px; height: 44px; border: 1px solid var(--beige-dark);
+    background: none; font-size: 12px; color: var(--charcoal);
+    transition: all 0.2s;
+  }
+  .size-btn:hover, .size-btn.active { border-color: var(--charcoal); background: var(--charcoal); color: var(--white); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--charcoal); color: var(--beige);
+    padding: 16px 24px; font-size: 12px;
+    letter-spacing: 1px; z-index: 400;
+    transform: translateY(80px); opacity: 0;
+    transition: all 0.4s cubic-bezier(.4,0,.2,1);
+    display: flex; align-items: center; gap: 10px;
+    border-left: 3px solid var(--gold);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Fake images using CSS gradients */
+  .img-cover-1 { background: linear-gradient(135deg, #e8dfd0 0%, #d4c5b0 40%, #c4b09a 100%); }
+  .img-cover-2 { background: linear-gradient(160deg, #ddd4c8 0%, #c8bdb0 50%, #b8a898 100%); }
+  .img-cover-3 { background: linear-gradient(125deg, #f0e8da 0%, #e0d4c2 60%, #d0c0aa 100%); }
+  .img-cover-4 { background: linear-gradient(150deg, #e5ddd2 0%, #cfc4b4 50%, #bfaf9d 100%); }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Top Bar -->
+<div class="topbar">
+  ✦ Envíos a toda Colombia &nbsp;&nbsp;·&nbsp;&nbsp; Piezas exclusivas &nbsp;&nbsp;·&nbsp;&nbsp; Alta costura colombiana ✦
+</div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-logo"><img src="./Logo.png" alt="" width="250 px" style="margin-top: 15px;"></a>
+  <ul class="nav-links">
+    <li><a href="#colecciones">Colecciones</a></li>
+    <li><a href="#productos">Prendas</a></li>
+    <li><a href="#editorial">Editorial</a></li>
+    <li><a href="#about">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="cart-btn" onclick="openCart()">
+      🛍
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero Carousel -->
+<section class="hero">
+  <div class="slides" id="heroSlides">
+    <div class="slide active">
+      <div class="slide-bg img-cover-1" style="width:100%;height:100%;background:linear-gradient(135deg,#ede4d8 0%,#d8cbbf 40%,#c8b8a6 100%);"></div>
+      <div class="slide-overlay">
+        <img style="width: 70%; margin-left: 17% ;" src="./portada3.png" alt="">
+      </div>
+      <div class="slide-content">
+        <span class="slide-tag">Colección Primavera 2025</span>
+        <h1 class="slide-title">La <em>elegancia</em><br>como esencia</h1>
+        <p class="slide-desc">Prendas diseñadas para la mujer contemporánea que comprende<br>que el estilo es una declaración silenciosa de poder.</p>
+        <a href="#productos" class="btn-primary">Explorar Colección</a>
+        <a href="#editorial" class="btn-outline">Editorial</a>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-bg" style="width:100%;height:100%;background:linear-gradient(150deg,#e2d8cc 0%,#cfc2b3 40%,#bfaf9d 100%);"></div>
+      <div class="slide-overlay">
+      <img style="width: 70%; margin-left: 17% ;" src="./portada2.png" alt="">
+    </div>
+      <div class="slide-content">
+        <span class="slide-tag">Línea Nocturna</span>
+        <h1 class="slide-title">Noche <em>áurea</em><br>y distinción</h1>
+        <p class="slide-desc">Siluetas refinadas que transforman cada encuentro<br>en un momento de pura sofisticación.</p>
+        <a href="#productos" class="btn-primary">Ver Prendas</a>
+        <a href="#editorial" class="btn-outline">Editorial</a>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-bg" style="width:100%;height:100%;background:linear-gradient(120deg,#f0ebe3 0%,#e0d8cc 40%,#d0c5b6 100%);"></div>
+      <div class="slide-overlay">
+        <img style="width: 70%; margin-left: 17% ;" src="./portada1.png" alt="">
+      </div>
+      <div class="slide-content">
+        
+        <span class="slide-tag">Accesorios & Complementos</span>
+        <h1 class="slide-title">El detalle<br>lo es <em>todo</em></h1>
+        <p class="slide-desc">Cada pieza es un poema tejido en telas nobles,<br>un susurro de lujo que habla sin palabras.</p>
+        <a href="#productos" class="btn-primary">Descubrir</a>
+        <a href="#editorial" class="btn-outline">Editorial</a>
+      </div>
+    </div>
+  </div>
+  <div class="carousel-dots" id="heroDots">
+    <button class="dot active" onclick="goToSlide(0)"></button>
+    <button class="dot" onclick="goToSlide(1)"></button>
+    <button class="dot" onclick="goToSlide(2)"></button>
+  </div>
+  <div class="carousel-arrows">
+    <button class="arrow-btn" onclick="changeSlide(-1)">▲</button>
+    <button class="arrow-btn" onclick="changeSlide(1)">▼</button>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- Categories -->
+<section id="colecciones">
+  <div class="section-header">
+    <span class="section-tag">Nuestras Colecciones</span>
+    <h2 class="section-title">Arte en cada <em>colección</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="categories">
+    <div class="cat-card">
+      <div class="cat-img" style="background:linear-gradient(160deg,#e8dfd2 0%,#d4c8b8 40%,#c0b4a4 100%);width:100%;height:100%;"><img width="100%" height="100%" src="./3.png" alt=""></div>
+      <div class="cat-overlay">
+        <h3 class="cat-name">Alta Costura</h3>
+        <a href="#productos" class="cat-link">Explorar →</a>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-img" style="background:linear-gradient(130deg,#ddd4c6 0%,#cbc0b2 50%,#bbb0a0 100%);width:100%;height:100%;"><img width="100%" height="100%" src="./2.png" alt=""></div>
+      <div class="cat-overlay">
+        <h3 class="cat-name">Prêt-à-Porter</h3>
+        <a href="#productos" class="cat-link">Explorar →</a>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-img" style="background:linear-gradient(145deg,#f0e8dc 0%,#e0d4c4 50%,#d0c4b0 100%);width:100%;height:100%;"><img width="100%" height="100%" src="./1.png" alt=""></div>
+      <div class="cat-overlay">
+        <h3 class="cat-name">Accesorios</h3>
+        <a href="#productos" class="cat-link">Explorar →</a>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-img" style="background:linear-gradient(125deg,#e4dbd0 0%,#d2c8bc 50%,#c2b8aa 100%);width:100%;height:100%;"><img width="100%" height="100%" src="./4.png" alt=""></div>
+      <div class="cat-overlay">
+        <h3 class="cat-name">Noche & Gala</h3>
+        <a href="#productos" class="cat-link">Explorar →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Products -->
+<section id="productos">
+  <div class="section-header">
+    <span class="section-tag">Prendas Seleccionadas</span>
+    <h2 class="section-title">Nuestra <em>curaduría</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="products-section">
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- Featured Banner -->
+<section id="editorial">
+  <div class="featured-banner">
+    <div class="featured-img-side">
+      <div style="width:100%;height:100%;background:linear-gradient(155deg,#e6ddd2 0%,#cfc3b4 50%,#bfb0a0 100%);"></div>
+    </div>
+    <div class="featured-content-side">
+      <span class="featured-tag">✦ Edición Limitada</span>
+      <h2 class="featured-title">La <em>Colección</em><br>Otoño Dorado</h2>
+      <p class="featured-desc">Solo 30 piezas numeradas, creadas a mano por nuestros maestros artesanos. Cada prenda lleva la firma de su creador y un certificado de autenticidad. Una inversión en belleza atemporal que trasciende las temporadas.</p>
+      <a href="https://wa.me/573125556211?text=Hola,%20me%20interesa%20la%20Colección%20Otoño%20Dorado%20de%20edición%20limitada" target="_blank" class="btn-light">Solicitar Información</a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="section-header">
+    <span class="section-tag">Lo que dicen</span>
+    <h2 class="section-title">Voces de <em>nuestra clientela</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="quote-icon">"</div>
+      <p class="testimonial-text">Cada prenda de Maison Élite es una obra de arte que envuelve el cuerpo con una gracia que pocas marcas logran.</p>
+      <span class="testimonial-author">— Valentina R., Bogotá</span>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote-icon">"</div>
+      <p class="testimonial-text">El nivel de detalle y la calidad de las telas es incomparable. Mi vestido de gala recibió elogios toda la noche.</p>
+      <span class="testimonial-author">— Isabella M., Medellín</span>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote-icon">"</div>
+      <p class="testimonial-text">La atención personalizada por WhatsApp fue impecable. Me asesoraron con paciencia y elegancia desde el primer mensaje.</p>
+      <span class="testimonial-author">— Camila F., Cali</span>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<div class="newsletter">
+  <h2 class="newsletter-title">Únete al círculo exclusivo</h2>
+  <p class="newsletter-sub">Primeras noticias de nuevas colecciones, eventos privados y acceso prioritario a piezas únicas.</p>
+  <div class="newsletter-form">
+    <input type="email" placeholder="Tu correo electrónico">
+    <button>Suscribirse</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer id="contacto">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><img src="./logo.png" width="60%" alt=""></div>
+      <p class="footer-about">Alta costura colombiana con alma. Creamos prendas que narran historias de elegancia y refinamiento, hechas para mujeres que saben exactamente quiénes son.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Colecciones</h4>
+      <ul>
+        <li><a href="#">Alta Costura</a></li>
+        <li><a href="#">Prêt-à-Porter</a></li>
+        <li><a href="#">Accesorios</a></li>
+        <li><a href="#">Noche & Gala</a></li>
+        <li><a href="#">Ediciones Limitadas</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Información</h4>
+      <ul>
+        <li><a href="#">Sobre Nosotros</a></li>
+        <li><a href="#">Cuidado de Prendas</a></li>
+        <li><a href="#">Envíos</a></li>
+        <li><a href="#">Devoluciones</a></li>
+        <li><a href="#">Política de Privacidad</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="https://wa.me/573125556211" target="_blank">📱 WhatsApp: 312 555 6211</a></li>
+        <li><a href="#">✉ info@maisonelite.co</a></li>
+        <li><a href="#">📍 Ibagué, Colombia</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Mood. Todos los derechos reservados.</span>
+    <div class="social-links">
+      <a href="#" class="social-link">𝕏</a>
+      <a href="#" class="social-link">𝕀</a>
+      <a href="#" class="social-link">𝔽</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Cart Sidebar -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>Mi Selección</h2>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">🛍</div>
+      <p>Tu selección está vacía</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <strong id="cartTotal">$0</strong>
+    </div>
+    <a href="#" id="waCheckoutBtn" class="btn-checkout-wa" onclick="checkoutWhatsApp(event)">
+      <span>📱</span> Consultar por WhatsApp
+    </a>
+    <p class="wa-note">Un asesor te contactará para confirmar<br>disponibilidad y coordinar tu pedido.</p>
+  </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="productModal">
+    <div class="modal-img" id="modalImg"></div>
+    <div class="modal-content" style="position:relative;">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-brand" id="modalBrand"></div>
+      <h2 class="modal-name" id="modalName"></h2>
+      <div class="modal-price" id="modalPrice"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-sizes">
+        <label>Selecciona tu talla</label>
+        <div class="size-options" id="modalSizes"></div>
+      </div>
+      <button class="btn-add-cart" id="modalAddCart" style="margin-bottom:10px;" onclick="addFromModal()">
+        Agregar a mi selección
+      </button>
+      <a href="#" id="modalWa" target="_blank" class="btn-whatsapp">📱 Consultar por WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✓ Prenda agregada a tu selección</div>
+
+<script>
+// ── DATA ──
+const products = [
+  { id:1, name:'Vestido Silueta Etérea', brand:'Alta Costura', price:890000, badge:'Nuevo', desc:'Vestido de seda natural con bordados a mano en hilo de oro. Escote en V pronunciado, espalda descubierta. Disponible en marfil y champagne.', colors:['#f5f0e8','#e8dfd2','#d4c5b0'], sizes:['XS','S','M','L'], bg:'linear-gradient(145deg,#ede4d8 0%,#d8cbbf 50%,#c8b8a6 100%)' },
+  { id:2, name:'Blusa Organza Celeste', brand:'Prêt-à-Porter', price:340000, badge:'', desc:'Blusa en organza japonesa con mangas globo y cuello joya. Un lienzo traslúcido de elegancia para el día a día elevado.', colors:['#e8e4dc','#d8d0c4'], sizes:['XS','S','M','L','XL'], bg:'linear-gradient(130deg,#e4dbd0 0%,#d2c8bc 50%,#c2b8aa 100%)' },
+  { id:3, name:'Falda Plisada Nórdica', brand:'Prêt-à-Porter', price:480000, badge:'Top Ventas', desc:'Falda midi en crepe de lana con plisado artesanal. Silueta que fluye con cada movimiento. Tiro alto y cintura elástica forrada.', colors:['#d8d0c4','#ccc4b8'], sizes:['S','M','L','XL'], bg:'linear-gradient(155deg,#ece4d8 0%,#dcd0c4 50%,#ccbfb0 100%)' },
+  { id:4, name:'Conjunto Perla & Seda', brand:'Alta Costura', price:1250000, badge:'Exclusivo', desc:'Conjunto de dos piezas: blazer oversized y pantalón de tiro alto en seda dupioni. Forro en crepé suave. Hecho completamente a medida.', colors:['#f0ebe3','#e4ddd5'], sizes:['XS','S','M','L'], bg:'linear-gradient(135deg,#f2ece4 0%,#e2d8cc 50%,#d2c8bc 100%)' },
+  { id:5, name:'Vestido Cóctel Dorado', brand:'Noche & Gala', price:720000, badge:'Nuevo', desc:'Vestido corto con lentejuelas doradas sobre base de satén. Escote corazón y falda evasé. El brillo perfecto para la noche perfecta.', colors:['#c9a96e','#d4b87a'], sizes:['XS','S','M'], bg:'linear-gradient(140deg,#e8ddd0 0%,#d8cfc4 50%,#c8bfb0 100%)' },
+  { id:6, name:'Abrigo Cashmere Ivory', brand:'Alta Costura', price:1680000, badge:'', desc:'Abrigo largo en cashmere 100% italiano, corte recto y botones forrados en cuero. La prenda de inversión definitiva para cada temporada.', colors:['#f5f0e8','#ede7db'], sizes:['XS','S','M','L','XL'], bg:'linear-gradient(150deg,#ede8e0 0%,#ddd5c8 50%,#cdc5b8 100%)' },
+  { id:7, name:'Maxivestido Floral Bordado', brand:'Prêt-à-Porter', price:560000, badge:'', desc:'Maxivestido en gasa con bordados florales hechos a mano. Mangas fluidas y falda con movimiento. Romántico y poderoso a la vez.', colors:['#e8dfd2','#ddd5c8'], sizes:['S','M','L'], bg:'linear-gradient(125deg,#eee8e0 0%,#ded8d0 50%,#cecac0 100%)' },
+  { id:8, name:'Trench Belted Luxe', brand:'Prêt-à-Porter', price:890000, badge:'Top Ventas', desc:'Gabardina de algodón egipcio tratado con cinturón a juego. Corte arquitectónico y doble botonadura. La elegancia funcional en su máxima expresión.', colors:['#d4c8b8','#c4b8a8'], sizes:['XS','S','M','L','XL'], bg:'linear-gradient(160deg,#e4ddd4 0%,#d4ccc4 50%,#c4bcb4 100%)' },
+];
+
+let cart = [];
+let currentModal = null;
+let currentSlide = 0;
+let selectedSize = '';
+
+// ── RENDER PRODUCTS ──
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = products.map(p => `
+    <div class="product-card" onclick="openModal(${p.id})">
+      <div class="product-img-wrap">
+        <div style="width:100%;height:100%;background:${p.bg};"></div>
+        ${p.badge ? `<span class="product-badge ${p.badge==='Nuevo'?'new':''}">${p.badge}</span>` : ''}
+        <div class="product-actions" onclick="event.stopPropagation()">
+          <button class="btn-add-cart" onclick="addToCart(${p.id})">Agregar a selección</button>
+          <a class="btn-whatsapp" href="https://wa.me/573125556211?text=Hola,%20me%20interesa%20el%20producto:%20${encodeURIComponent(p.name)}%20(Precio:%20${formatPrice(p.price)})" target="_blank">📱 Consultar por WhatsApp</a>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">${p.brand}</div>
+        <h3 class="product-name">${p.name}</h3>
+        <div class="product-price"><strong>${formatPrice(p.price)}</strong></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function formatPrice(n) {
+  return '$' + n.toLocaleString('es-CO');
+}
+
+// ── CART ──
+function addToCart(id, size='') {
+  const p = products.find(x => x.id === id);
+  const sz = size || (p.sizes ? p.sizes[0] : '');
+  const existing = cart.find(x => x.id === id && x.size === sz);
+  if (existing) { existing.qty++; }
+  else { cart.push({...p, qty:1, size:sz}); }
+  updateCartUI();
+  showToast(`"${p.name}" agregado ✓`);
+}
+
+function addFromModal() {
+  if (!currentModal) return;
+  addToCart(currentModal, selectedSize);
+  closeModal();
+}
+
+function removeFromCart(id, size) {
+  cart = cart.filter(x => !(x.id === id && x.size === size));
+  updateCartUI();
+}
+
+function changeQty(id, size, delta) {
+  const item = cart.find(x => x.id === id && x.size === size);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(id, size);
+  else updateCartUI();
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s,x) => s + x.qty, 0);
+  const total = cart.reduce((s,x) => s + x.qty * x.price, 0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = formatPrice(total);
+  const itemsEl = document.getElementById('cartItems');
+  const emptyEl = document.getElementById('cartEmpty');
+  if (cart.length === 0) {
+    emptyEl.style.display = '';
+    itemsEl.innerHTML = '';
+    itemsEl.appendChild(emptyEl);
+    return;
+  }
+  emptyEl.style.display = 'none';
+  const itemsHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img" style="background:${item.bg};"></div>
+      <div class="cart-item-info">
+        <div class="cart-item-brand">${item.brand}</div>
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${formatPrice(item.price)} · Talla: ${item.size}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',1)">+</button>
+          <button class="remove-item" onclick="removeFromCart(${item.id},'${item.size}')">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  itemsEl.innerHTML = itemsHTML;
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartSidebar').classList.add('open');
+}
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartSidebar').classList.remove('open');
+}
+
+function checkoutWhatsApp(e) {
+  e.preventDefault();
+  if (cart.length === 0) { showToast('¡Agrega productos primero!'); return; }
+  const itemsList = cart.map(i => `• ${i.name} (Talla: ${i.size}) x${i.qty} = ${formatPrice(i.price * i.qty)}`).join('%0A');
+  const total = formatPrice(cart.reduce((s,x)=>s+x.qty*x.price,0));
+  const msg = `Hola! Me interesa hacer el siguiente pedido:%0A%0A${itemsList}%0A%0A*Total: ${total}*%0A%0A¿Podrían confirmar disponibilidad?`;
+  window.open(`https://wa.me/573125556211?text=${msg}`, '_blank');
+}
+
+// ── MODAL ──
+function openModal(id) {
+  const p = products.find(x => x.id === id);
+  currentModal = id;
+  selectedSize = p.sizes ? p.sizes[0] : '';
+  document.getElementById('modalImg').innerHTML = `<div style="width:100%;height:100%;min-height:400px;background:${p.bg};"></div>`;
+  document.getElementById('modalBrand').textContent = p.brand;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalPrice').textContent = formatPrice(p.price);
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalSizes').innerHTML = p.sizes.map((s,i) =>
+    `<button class="size-btn ${i===0?'active':''}" onclick="selectSize('${s}',this)">${s}</button>`
+  ).join('');
+  document.getElementById('modalWa').href = `https://wa.me/573125556211?text=Hola,%20me%20interesa:%20${encodeURIComponent(p.name)}%20(${formatPrice(p.price)})`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function selectSize(s, btn) {
+  selectedSize = s;
+  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modalOverlay') && !e.target.classList.contains('modal-close')) return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentModal = null;
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── CAROUSEL ──
+function goToSlide(n) {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  currentSlide = (n + slides.length) % slides.length;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+  document.getElementById('heroSlides').style.transform = `translateX(-${currentSlide * 100}%)`;
+}
+function changeSlide(d) { goToSlide(currentSlide + d); }
+setInterval(() => changeSlide(1), 5500);
+
+// ── MARQUEE ──
+const marqueeItems = ['Alta Costura', 'Piezas Únicas', 'Telas Nobles', 'Hecho en Colombia', 'Envíos Nacionales', 'Asesoría Personalizada'];
+const track = document.getElementById('marqueeTrack');
+const dupe = [...marqueeItems, ...marqueeItems];
+track.innerHTML = dupe.map(t => `<span class="marquee-item">${t}<span class="marquee-dot"></span></span>`).join('');
+
+// ── CURSOR ──
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
+});
+
+// ── INIT ──
+renderProducts();
+updateCartUI();
+</script>
+</body>
+</html>
